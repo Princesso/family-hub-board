@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Family Hub Board — App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss-cdn@3.4.10/tailwindcss.js"></script>
+  <style type="text/tailwindcss" data-teda="tailwind-apply">
+    @layer components {
+      .btn-primary { @apply inline-flex items-center justify-center bg-[#1E90A8] text-white px-4 py-2 rounded-full shadow-xl hover:bg-[#177b8f] active:scale-[0.98] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#1E90A8]/30 whitespace-nowrap z-10; }
+      .btn-secondary { @apply inline-flex items-center justify-center bg-white text-[#1E90A8] border border-[#1E90A8]/30 px-4 py-2 rounded-full shadow-lg hover:bg-[#f6fdff] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#1E90A8]/20 whitespace-nowrap z-10; }
+      .btn-danger { @apply inline-flex items-center justify-center bg-[#FF6B3D] text-white px-3 py-1.5 rounded-full shadow-lg hover:bg-[#e65f33] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#FF6B3D]/30 whitespace-nowrap; }
+      .btn-ghost { @apply inline-flex items-center justify-center px-3 py-1.5 rounded-full text-[#334155] hover:bg-black/5 transition-all duration-300 whitespace-nowrap; }
+      .chip { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-black/5 text-[#0F172A]; }
+      .section-card { @apply ring-1 ring-black/5 bg-white rounded-2xl shadow-lg; }
+      .field { @apply w-full px-3 py-2 rounded-xl border border-black/10 focus:outline-none focus:ring-4 focus:ring-[#1E90A8]/20; }
+      .label { @apply text-sm text-[#334155] mb-1 block; }
+      .h-scroll { @apply overflow-x-auto whitespace-nowrap; }
+    }
+  </style>
+</head>
+<body class="bg-[#FAFAFA] text-[#0F172A] antialiased" style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;">
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-black/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo.svg" alt="Family Hub" class="w-8 h-8"/>
+        <div>
+          <div class="text-sm text-[#64748B]" id="householdLabel">Family Hub</div>
+          <div class="font-semibold" style="font-family: Oswald;" id="householdName">Your Household</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button id="inviteBtn" class="btn-primary">Invite</button>
+        <button id="archivesBtn" class="btn-secondary">Archives</button>
+        <a href="index.html" class="btn-ghost">Home</a>
+      </div>
+    </div>
+
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-2">
+      <ul class="flex gap-2 overflow-x-auto no-scrollbar" role="tablist">
+        <li><button class="tab-link btn-ghost" data-target="#section-chores">Chores</button></li>
+        <li><button class="tab-link btn-ghost" data-target="#section-food">Food</button></li>
+        <li><button class="tab-link btn-ghost" data-target="#section-birthdays">Birthdays</button></li>
+        <li><button class="tab-link btn-ghost" data-target="#section-rules">Rules & Traditions</button></li>
+        <li><button class="tab-link btn-ghost" data-target="#section-openboard">Open Board</button></li>
+        <li><button class="tab-link btn-ghost" data-target="#section-wishlist">Kids Wishlist</button></li>
+        <li><button class="tab-link btn-ghost" data-target="#section-holidays">Holiday Plans</button></li>
+        <li><button class="tab-link btn-ghost" data-target="#section-timeoff">Time Off</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <!-- Chores -->
+    <section id="section-chores" class="section-card p-4 sm:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl" style="font-family: Oswald; font-weight:700;">Chore Board</h2>
+          <p class="text-[#64748B] text-sm">Daily, weekly, monthly, and quarterly tasks. Assign to family members.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <select id="choreMemberFilter" class="field w-auto">
+            <option value="">All members</option>
+          </select>
+          <button id="addChoreBtn" class="btn-primary">Add chore</button>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <ul class="flex flex-wrap gap-2">
+          <li><button class="chip filter-chip" data-freq="daily">Daily</button></li>
+          <li><button class="chip filter-chip" data-freq="weekly">Weekly</button></li>
+          <li><button class="chip filter-chip" data-freq="monthly">Monthly</button></li>
+          <li><button class="chip filter-chip" data-freq="quarterly">Quarterly</button></li>
+          <li><button class="chip filter-chip" data-freq="">All</button></li>
+        </ul>
+      </div>
+
+      <div id="choreList" class="mt-4 grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- Food -->
+    <section id="section-food" class="section-card p-4 sm:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl" style="font-family: Oswald; font-weight:700;">Monthly Food Timetable</h2>
+          <p class="text-[#64748B] text-sm">Healthy Nigerian meal-prep. Cook once every two weeks, freeze, then heat daily.</p>
+        </div>
+        <div class="flex flex-wrap gap-2 items-center">
+          <button id="prevMonth" class="btn-secondary" aria-label="Previous month">Prev</button>
+          <div id="foodMonthLabel" class="text-sm font-medium"></div>
+          <button id="nextMonth" class="btn-secondary" aria-label="Next month">Next</button>
+          <button id="regenFood" class="btn-primary">Regenerate</button>
+        </div>
+      </div>
+      <div class="mt-4 h-scroll" id="foodScroller">
+        <div id="foodGrid" class="inline-grid grid-flow-col auto-cols-[260px] gap-4 pb-2"></div>
+      </div>
+      <div class="mt-4 text-xs text-[#475569]">Notes: Day 1 and 15 are batch cook days. Husband has extra snacks to reach 5 meals. Kids have 3 meals.</div>
+    </section>
+
+    <!-- Birthdays -->
+    <section id="section-birthdays" class="section-card p-4 sm:p-6">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <h2 class="text-2xl" style="font-family: Oswald; font-weight:700;">Birthday Reminders</h2>
+        <button id="addBirthdayBtn" class="btn-primary">Add birthday</button>
+      </div>
+      <div id="birthdaysThisMonth" class="mt-3"></div>
+      <div id="birthdayList" class="mt-4 grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- Rules & Traditions -->
+    <section id="section-rules" class="section-card p-4 sm:p-6">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <h2 class="text-2xl" style="font-family: Oswald; font-weight:700;">Family Rules & Traditions</h2>
+          <p class="text-[#64748B] text-sm">Agree on how we communicate, treat each other, and celebrate. Add more anytime.</p>
+        </div>
+        <div class="flex gap-2">
+          <button id="addRuleBtn" class="btn-primary">Add rule</button>
+          <button id="addTraditionBtn" class="btn-secondary">Add tradition</button>
+        </div>
+      </div>
+      <div class="mt-4 grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="font-semibold mb-2" style="font-family: Oswald;">Rules</h3>
+          <div id="rulesList" class="space-y-2"></div>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2" style="font-family: Oswald;">Traditions</h3>
+          <div id="traditionsList" class="space-y-2"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Board -->
+    <section id="section-openboard" class="section-card p-4 sm:p-6">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <h2 class="text-2xl" style="font-family: Oswald; font-weight:700;">Open Board</h2>
+          <p class="text-[#64748B] text-sm">Anything to address. Scores, grievances, shoutouts, or ideas.</p>
+        </div>
+        <button id="addOpenItemBtn" class="btn-primary">Add item</button>
+      </div>
+      <div id="openBoardList" class="mt-4 grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- Wishlist -->
+    <section id="section-wishlist" class="section-card p-4 sm:p-6">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <h2 class="text-2xl" style="font-family: Oswald; font-weight:700;">Kids Wishlist</h2>
+          <p class="text-[#64748B] text-sm">Track items, link to sources, set priority, and mark purchased.</p>
+        </div>
+        <button id="addWishBtn" class="btn-primary">Add wish</button>
+      </div>
+      <div id="wishlist" class="mt-4 grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- Holidays -->
+    <section id="section-holidays" class="section-card p-4 sm:p-6">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <h2 class="text-2xl" style="font-family: Oswald; font-weight:700;">Holiday Plans</h2>
+        <button id="addHolidayBtn" class="btn-primary">Add plan</button>
+      </div>
+      <div class="mt-4 h-scroll">
+        <div id="holidayStrip" class="inline-flex gap-4 pb-2"></div>
+      </div>
+    </section>
+
+    <!-- Time Off -->
+    <section id="section-timeoff" class="section-card p-4 sm:p-6">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <h2 class="text-2xl" style="font-family: Oswald; font-weight:700;">Adults Time Off</h2>
+        <button id="addTimeOffBtn" class="btn-primary">Add time off</button>
+      </div>
+      <div class="mt-4 overflow-x-auto">
+        <table class="min-w-[720px] w-full text-sm">
+          <thead class="bg-black/5">
+            <tr>
+              <th class="text-left p-3">Adult</th>
+              <th class="text-left p-3">Start</th>
+              <th class="text-left p-3">End</th>
+              <th class="text-left p-3">Reason</th>
+              <th class="text-left p-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="timeoffTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <div id="overlay" class="fixed inset-0 bg-black/40 hidden z-40"></div>
+
+  <!-- Onboarding Modal -->
+  <div id="onboardModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-2xl p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl" style="font-family: Oswald; font-weight:700;">Create your family board</h3>
+        <button class="btn-ghost" id="skipOnboard">Skip</button>
+      </div>
+      <div class="mt-4 grid gap-4">
+        <div>
+          <label class="label">Household name</label>
+          <input id="householdInput" type="text" class="field" placeholder="e.g., The Adeyemi Family"/>
+        </div>
+        <div>
+          <label class="label">Family members</label>
+          <div id="memberInputs" class="space-y-2"></div>
+          <button id="addMemberField" class="btn-secondary mt-2">Add member</button>
+        </div>
+      </div>
+      <div class="mt-5 flex items-center justify-end gap-2">
+        <button id="startBoardBtn" class="btn-primary">Create board</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invite Modal -->
+  <div id="inviteModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-xl p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl" style="font-family: Oswald; font-weight:700;">Invite your family</h3>
+        <button class="btn-ghost" data-close="#inviteModal">Close</button>
+      </div>
+      <p class="text-sm text-[#475569] mt-2">Share this private link. New members can join and contribute to all boards.</p>
+      <div class="mt-3">
+        <input id="inviteLink" class="field" readonly>
+      </div>
+      <div class="mt-4 flex items-center justify-end gap-2">
+        <button id="copyInvite" class="btn-primary">Copy link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Join Modal (from invite) -->
+  <div id="joinModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-md p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl" style="font-family: Oswald; font-weight:700;">Join this family board</h3>
+        <button class="btn-ghost" data-close="#joinModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <div>
+          <label class="label">Your name</label>
+          <input id="joinName" class="field" placeholder="Enter your name"/>
+        </div>
+        <div>
+          <label class="label">Role</label>
+          <select id="joinRole" class="field">
+            <option>Adult</option>
+            <option>Kid</option>
+          </select>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-end gap-2">
+        <button id="doJoin" class="btn-primary">Join board</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chore Modal -->
+  <div id="choreModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-lg p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 id="choreModalTitle" class="text-xl" style="font-family: Oswald; font-weight:700;">New chore</h3>
+        <button class="btn-ghost" data-close="#choreModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <input type="hidden" id="choreId">
+        <div>
+          <label class="label">Title</label>
+          <input id="choreTitle" class="field" placeholder="e.g., Sweep living room"/>
+        </div>
+        <div>
+          <label class="label">Details</label>
+          <textarea id="choreDetails" class="field" rows="3" placeholder="Notes or steps"></textarea>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-3">
+          <div>
+            <label class="label">Frequency</label>
+            <select id="choreFreq" class="field">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+            </select>
+          </div>
+          <div>
+            <label class="label">Assign to</label>
+            <select id="choreAssignee" class="field"></select>
+          </div>
+          <div>
+            <label class="label">Due (optional)</label>
+            <input id="choreDue" type="date" class="field"/>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-between">
+        <button id="deleteChoreBtn" class="btn-danger hidden">Delete</button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="btn-secondary" data-close="#choreModal">Cancel</button>
+          <button id="saveChoreBtn" class="btn-primary">Save chore</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Birthday Modal -->
+  <div id="birthdayModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-md p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl" id="birthdayModalTitle" style="font-family: Oswald; font-weight:700;">Add birthday</h3>
+        <button class="btn-ghost" data-close="#birthdayModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <input type="hidden" id="birthdayId">
+        <div>
+          <label class="label">Name</label>
+          <input id="birthdayName" class="field" placeholder="Whose birthday"/>
+        </div>
+        <div>
+          <label class="label">Date</label>
+          <input id="birthdayDate" type="date" class="field"/>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-between">
+        <button id="deleteBirthdayBtn" class="btn-danger hidden">Delete</button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="btn-secondary" data-close="#birthdayModal">Cancel</button>
+          <button id="saveBirthdayBtn" class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Open Board Modal -->
+  <div id="openItemModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-lg p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 id="openItemModalTitle" class="text-xl" style="font-family: Oswald; font-weight:700;">Add item</h3>
+        <button class="btn-ghost" data-close="#openItemModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <input type="hidden" id="openItemId">
+        <div>
+          <label class="label">Type</label>
+          <select id="openType" class="field">
+            <option value="grievance">Grievance</option>
+            <option value="score">Score</option>
+            <option value="shoutout">Shoutout</option>
+            <option value="note">Note</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">Title</label>
+          <input id="openTitle" class="field" placeholder="e.g., Screen time rules"/>
+        </div>
+        <div>
+          <label class="label">Detail</label>
+          <textarea id="openDetail" class="field" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-between">
+        <button id="deleteOpenItemBtn" class="btn-danger hidden">Delete</button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="btn-secondary" data-close="#openItemModal">Cancel</button>
+          <button id="saveOpenItemBtn" class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wishlist Modal -->
+  <div id="wishModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-lg p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 id="wishModalTitle" class="text-xl" style="font-family: Oswald; font-weight:700;">Add wish</h3>
+        <button class="btn-ghost" data-close="#wishModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <input type="hidden" id="wishId">
+        <div>
+          <label class="label">Child</label>
+          <select id="wishChild" class="field"></select>
+        </div>
+        <div>
+          <label class="label">Item</label>
+          <input id="wishItem" class="field" placeholder="e.g., Bicycle"/>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-3">
+          <div>
+            <label class="label">Price (optional)</label>
+            <input id="wishPrice" class="field" type="number" min="0" step="0.01" placeholder="0"/>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="label">Link (optional)</label>
+            <input id="wishLink" class="field" placeholder="https://"/>
+          </div>
+        </div>
+        <div>
+          <label class="label">Priority</label>
+          <input id="wishPriority" type="range" min="1" max="5" value="3" class="w-full"/>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-between">
+        <button id="deleteWishBtn" class="btn-danger hidden">Delete</button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="btn-secondary" data-close="#wishModal">Cancel</button>
+          <button id="saveWishBtn" class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Holiday Modal -->
+  <div id="holidayModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-lg p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 id="holidayModalTitle" class="text-xl" style="font-family: Oswald; font-weight:700;">Add plan</h3>
+        <button class="btn-ghost" data-close="#holidayModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <input type="hidden" id="holidayId">
+        <div>
+          <label class="label">Title</label>
+          <input id="holidayTitle" class="field" placeholder="e.g., Summer getaway"/>
+        </div>
+        <div>
+          <label class="label">Destination</label>
+          <input id="holidayDestination" class="field" placeholder="e.g., Calabar"/>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="label">Start</label>
+            <input id="holidayStart" type="date" class="field"/>
+          </div>
+          <div>
+            <label class="label">End</label>
+            <input id="holidayEnd" type="date" class="field"/>
+          </div>
+        </div>
+        <div>
+          <label class="label">Budget (optional)</label>
+          <input id="holidayBudget" class="field" type="number" min="0" step="0.01"/>
+        </div>
+        <div>
+          <label class="label">Notes</label>
+          <textarea id="holidayNotes" class="field" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-between">
+        <button id="deleteHolidayBtn" class="btn-danger hidden">Delete</button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="btn-secondary" data-close="#holidayModal">Cancel</button>
+          <button id="saveHolidayBtn" class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Time Off Modal -->
+  <div id="timeoffModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-lg p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 id="timeoffModalTitle" class="text-xl" style="font-family: Oswald; font-weight:700;">Add time off</h3>
+        <button class="btn-ghost" data-close="#timeoffModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <input type="hidden" id="timeoffId">
+        <div>
+          <label class="label">Adult</label>
+          <select id="timeoffMember" class="field"></select>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="label">Start</label>
+            <input id="timeoffStart" type="date" class="field"/>
+          </div>
+          <div>
+            <label class="label">End</label>
+            <input id="timeoffEnd" type="date" class="field"/>
+          </div>
+        </div>
+        <div>
+          <label class="label">Reason</label>
+          <input id="timeoffReason" class="field" placeholder="e.g., Annual leave"/>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-between">
+        <button id="deleteTimeoffBtn" class="btn-danger hidden">Delete</button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="btn-secondary" data-close="#timeoffModal">Cancel</button>
+          <button id="saveTimeoffBtn" class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rules Modal -->
+  <div id="ruleModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-lg p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 id="ruleModalTitle" class="text-xl" style="font-family: Oswald; font-weight:700;">Add rule</h3>
+        <button class="btn-ghost" data-close="#ruleModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <input type="hidden" id="ruleId">
+        <div>
+          <label class="label">Title</label>
+          <input id="ruleTitle" class="field" placeholder="e.g., We speak with kindness"/>
+        </div>
+        <div>
+          <label class="label">Detail (optional)</label>
+          <textarea id="ruleDetail" class="field" rows="3" placeholder="Add specifics"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-between">
+        <button id="deleteRuleBtn" class="btn-danger hidden">Delete</button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="btn-secondary" data-close="#ruleModal">Cancel</button>
+          <button id="saveRuleBtn" class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tradition Modal -->
+  <div id="traditionModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-lg p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 id="traditionModalTitle" class="text-xl" style="font-family: Oswald; font-weight:700;">Add tradition</h3>
+        <button class="btn-ghost" data-close="#traditionModal">Close</button>
+      </div>
+      <div class="mt-3 grid gap-3">
+        <input type="hidden" id="traditionId">
+        <div>
+          <label class="label">Title</label>
+          <input id="traditionTitle" class="field" placeholder="e.g., Friday game night"/>
+        </div>
+        <div>
+          <label class="label">Detail (optional)</label>
+          <textarea id="traditionDetail" class="field" rows="3" placeholder="Describe the tradition"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-between">
+        <button id="deleteTraditionBtn" class="btn-danger hidden">Delete</button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="btn-secondary" data-close="#traditionModal">Cancel</button>
+          <button id="saveTraditionBtn" class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Archives Modal -->
+  <div id="archivesModal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+    <div class="section-card w-full max-w-3xl p-5 sm:p-6 bg-white">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl" style="font-family: Oswald; font-weight:700;">Archives</h3>
+        <button class="btn-ghost" data-close="#archivesModal">Close</button>
+      </div>
+      <div class="mt-3 grid md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-2">
+        <div>
+          <h4 class="font-semibold mb-2" style="font-family: Oswald;">Chores</h4>
+          <div id="archChores" class="space-y-2"></div>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2" style="font-family: Oswald;">Open Board</h4>
+          <div id="archOpen" class="space-y-2"></div>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2" style="font-family: Oswald;">Wishlist</h4>
+          <div id="archWish" class="space-y-2"></div>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2" style="font-family: Oswald;">Birthdays</h4>
+          <div id="archBirthdays" class="space-y-2"></div>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2" style="font-family: Oswald;">Holidays</h4>
+          <div id="archHolidays" class="space-y-2"></div>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2" style="font-family: Oswald;">Time Off</h4>
+          <div id="archTimeoff" class="space-y-2"></div>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2" style="font-family: Oswald;">Rules</h4>
+          <div id="archRules" class="space-y-2"></div>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2" style="font-family: Oswald;">Traditions</h4>
+          <div id="archTraditions" class="space-y-2"></div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="scripts/helpers.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>

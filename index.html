@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Family Hub Board</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss-cdn@3.4.10/tailwindcss.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style type="text/tailwindcss" data-teda="tailwind-apply">
+    @layer components {
+      .btn-primary { @apply inline-flex items-center justify-center bg-[#1E90A8] text-white px-5 py-3 rounded-full shadow-xl hover:bg-[#177b8f] active:scale-[0.98] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#1E90A8]/30 whitespace-nowrap; }
+      .btn-secondary { @apply inline-flex items-center justify-center bg-white text-[#1E90A8] border border-[#1E90A8]/30 px-5 py-3 rounded-full shadow-lg hover:bg-[#f6fdff] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#1E90A8]/20 whitespace-nowrap; }
+      .tag { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#FF6B3D]/10 text-[#FF6B3D]; }
+      .ring-card { @apply ring-1 ring-black/5 rounded-2xl shadow-lg bg-white; }
+    }
+  </style>
+</head>
+<body class="bg-[#FAFAFA] text-[#0F172A] antialiased" style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;">
+  <header class="relative overflow-hidden">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 py-6">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo.svg" alt="Family Hub" class="w-9 h-9 drop-shadow"/>
+        <span class="text-xl tracking-wide font-semibold" style="font-family: Oswald, Inter;">Family Hub Board</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-3">
+        <a href="#why" class="btn-secondary">Why it works</a>
+        <a href="app.html" class="btn-primary">Open the board</a>
+      </div>
+    </nav>
+
+    <section class="relative max-w-7xl mx-auto px-6 pt-8 pb-16 sm:pt-12">
+      <div class="absolute -top-16 right-0 w-64 h-64 bg-[#FF6B3D]/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute top-24 -left-10 w-52 h-52 bg-[#1E90A8]/10 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <p class="tag mb-6">Built for real families</p>
+        <h1 class="text-[#0B1220] leading-[0.95] tracking-tight mb-6" style="font-family: Oswald, Inter; font-weight:700; font-size: clamp(2.6rem, 7vw, 5rem);">
+          One beautiful board for chores, meals, memories, and more
+        </h1>
+        <div class="max-w-2xl text-lg sm:text-xl text-[#334155] leading-relaxed">
+          Run your home like a team without losing the warmth. Plan Nigerian meal-prep for a month, assign chores by cadence, track birthdays, wishlist dreams, holidays, and time off. Invite family with a link and let everyone add to the board.
+        </div>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="app.html" class="btn-primary">Start now</a>
+          <a href="#peek" class="btn-secondary">See what is inside</a>
+        </div>
+      </div>
+
+      <div class="mt-14">
+        <div class="ring-card p-6 sm:p-8 relative overflow-hidden">
+          <div class="absolute -right-8 -bottom-8 w-56 h-56 rounded-full bg-[#1E90A8]/5"></div>
+          <blockquote class="text-2xl sm:text-3xl text-[#0B1220]" style="font-family: Oswald, Inter; font-weight:600;">
+            “Keep peace at home with clear plans and fair chores. Feed well with one cook day in two weeks, then relax.”
+          </blockquote>
+          <p class="mt-4 text-[#475569]">A modern family board that actually fits your life.</p>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section id="peek" class="max-w-7xl mx-auto px-6 py-16">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="ring-card p-6 hover:shadow-xl transition-all duration-300">
+          <div class="text-sm uppercase tracking-wide text-[#1E90A8]" style="font-family: Oswald;">Chores</div>
+          <h3 class="mt-2 text-2xl" style="font-family: Oswald; font-weight:600;">Daily to quarterly</h3>
+          <p class="mt-2 text-[#475569]">Assign by person and track progress. Everything saved with archives for peace of mind.</p>
+        </div>
+        <div class="ring-card p-6 hover:shadow-xl transition-all duration-300">
+          <div class="text-sm uppercase tracking-wide text-[#FF6B3D]" style="font-family: Oswald;">Food</div>
+          <h3 class="mt-2 text-2xl" style="font-family: Oswald; font-weight:600;">Nigerian meal-prep</h3>
+          <p class="mt-2 text-[#475569]">Healthy month plan with two cook days, freeze once and heat daily. Husband 5 meals, kids 3 meals.</p>
+        </div>
+        <div class="ring-card p-6 hover:shadow-xl transition-all duration-300">
+          <div class="text-sm uppercase tracking-wide text-[#1E90A8]" style="font-family: Oswald;">Invites</div>
+          <h3 class="mt-2 text-2xl" style="font-family: Oswald; font-weight:600;">Share a link</h3>
+          <p class="mt-2 text-[#475569]">Invite family with a private link. Joiners can add chores and items across boards.</p>
+        </div>
+      </div>
+
+      <div id="why" class="mt-16 ring-card p-8">
+        <h2 class="text-3xl" style="font-family: Oswald; font-weight:700;">Why families love it</h2>
+        <ul class="mt-4 grid sm:grid-cols-2 gap-4 text-[#334155]">
+          <li class="flex gap-3"><span class="tag">Offline</span><span>Works in your browser with local storage, your data stays on your device.</span></li>
+          <li class="flex gap-3"><span class="tag">Balanced</span><span>Fair chore assignment by cadence for adults and kids.</span></li>
+          <li class="flex gap-3"><span class="tag">Healthy</span><span>Nutritious Nigerian dishes curated for energy and growth.</span></li>
+          <li class="flex gap-3"><span class="tag">Restorable</span><span>Deleted items go to Archives where you can restore anytime.</span></li>
+        </ul>
+        <div class="mt-8">
+          <a href="app.html" class="btn-primary">Open the board</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-black/5 py-10 mt-6">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo.svg" alt="Family Hub" class="w-7 h-7"/>
+        <span class="text-sm text-[#475569]">Family Hub Board</span>
+      </div>
+      <p class="text-sm text-[#64748B]">Built for joyful homes. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll for anchor links
+    $(function(){
+      $('a[href^="#"]').on('click', function(e){
+        const target = $(this.getAttribute('href'));
+        if(target.length){ e.preventDefault(); $('html, body').animate({scrollTop: target.offset().top - 60}, 500); }
+      });
+    });
+  </script>
+  <script src="scripts/helpers.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>
